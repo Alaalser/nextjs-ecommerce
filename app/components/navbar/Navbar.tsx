@@ -11,6 +11,7 @@ export default function Navbar({ user }: Session) {
     flex
     justify-between
     items-center
+    py-8
     "
     >
       <h1>Navbar</h1>

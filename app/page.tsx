@@ -1,5 +1,6 @@
 import Stripe from "stripe";
-import Product from "./components/Product";
+import Product from "./components/product/Product";
+
 const getProducts = async () => {
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
     apiVersion: "2022-11-15",
@@ -25,10 +26,9 @@ const getProducts = async () => {
 };
 export default async function Home() {
   const products = await getProducts();
-  console.log(products);
 
   return (
-    <main>
+    <main className="grid grid-cols-fluid gap-16">
       {products.map((product) => (
         <Product
           image={product.image}
