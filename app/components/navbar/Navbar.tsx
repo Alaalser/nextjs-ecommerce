@@ -23,9 +23,13 @@ export default function Navbar({ user }: Session) {
           className="flex items-center text-3l relative cursor-pointer "
         >
           <AiFillShopping size={32} />
-          <span className="bg-teal-700 text-white text-sm font-bold w-5 h-5 rounded-full absolute bottom-4 left-4 flex items-center justify-center">
-            {cartStore.cart.length > 0 ? cartStore.cart.length : ""}
-          </span>
+          {cartStore.cart.length > 0 ? (
+            <span className="bg-teal-700 text-white text-sm font-bold w-5 h-5 rounded-full absolute bottom-4 left-4 flex items-center justify-center">
+              {cartStore.cart.length}
+            </span>
+          ) : (
+            <></>
+          )}
         </li>
         {user ? (
           <li>
