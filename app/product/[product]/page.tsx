@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { formatPrice } from "@/app/components/product/PriceFormat";
+import AddToCart from "./AddToCart";
 
 interface ISearchParams {
   name: string;
@@ -16,7 +17,7 @@ const ProductPage = async ({
 }: {
   searchParams: ISearchParams;
 }) => {
-  console.log(searchParams.features);
+  console.log(searchParams.id);
 
   return (
     <div className="flex justify-between gap-24 p-12 text-gray-700">
@@ -38,9 +39,14 @@ const ProductPage = async ({
               : ""}
           </p>
         </div>
-        <button className="bg-teal-600 rounded-md px-6 py-2 my-12 text-white">
-          Add to cart
-        </button>
+        <AddToCart
+          unit_amount={searchParams?.unit_amount}
+          id={searchParams.id}
+          name={searchParams.name}
+          image={searchParams.image}
+          quantity={searchParams.quantity as number}
+          key={searchParams.id}
+        />
       </div>
     </div>
   );

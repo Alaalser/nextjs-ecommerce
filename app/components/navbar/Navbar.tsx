@@ -5,7 +5,7 @@ import { Session } from "next-auth";
 import { signIn, signOut } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import Cart from "../cart/Cart";
+import Cart from "../../cart/Cart";
 import { AiFillShopping } from "react-icons/ai";
 
 export default function Navbar({ user }: Session) {

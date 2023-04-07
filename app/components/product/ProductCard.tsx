@@ -30,7 +30,7 @@ const ProductCard: React.FC<IProduct> = ({
     <Link
       href={{
         pathname: `/product/${id}`,
-        query: { name, image, unit_amount, description, features },
+        query: { name, image, unit_amount, description, features, id },
       }}
     >
       <div className="text-gray-700">
