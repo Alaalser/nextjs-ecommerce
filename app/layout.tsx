@@ -2,6 +2,7 @@ import Navbar from "./components/navbar/Navbar";
 import "./globals.css";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
+import ClientOnly from "./components/ClientOnly";
 
 export const metadata = {
   title: "Best Ecommerce ",
@@ -17,8 +18,10 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className="mx-64">
-        <Navbar user={session?.user} expires={session?.expires as string} />
-        {children}
+        <ClientOnly>
+          <Navbar user={session?.user} expires={session?.expires as string} />
+          {children}
+        </ClientOnly>
       </body>
     </html>
   );
