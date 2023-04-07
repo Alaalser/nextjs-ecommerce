@@ -3,6 +3,9 @@ import "./globals.css";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import ClientOnly from "./components/ClientOnly";
+import { Roboto, Lobster_Two } from "next/font/google";
+
+const roboto = Roboto({ weight: ["400", "500", "700"], subsets: ["latin"] });
 
 export const metadata = {
   title: "Best Ecommerce ",
@@ -17,7 +20,7 @@ export default async function RootLayout({
   const session = await getServerSession(authOptions);
   return (
     <html lang="en">
-      <body className="mx-64">
+      <body className={`mx-64 ${roboto.className}`}>
         <ClientOnly>
           <Navbar user={session?.user} expires={session?.expires as string} />
           {children}
