@@ -16,6 +16,10 @@ interface IUseCartStore {
   toggleCart: () => void;
   addProduct: (item: CartItem) => void;
   removeProduct: (item: CartItem) => void;
+  paymentIntent: string;
+  onCheckout: string;
+  setPaymentIntent: (val: string) => void;
+  setCheckout: (val: string) => void;
 }
 
 export const useCartStore = create<IUseCartStore>()(
@@ -23,6 +27,8 @@ export const useCartStore = create<IUseCartStore>()(
     (set) => ({
       cart: [],
       isOpen: false,
+      paymentIntent: "",
+      onCheckout: "cart",
       toggleCart: () => set((state) => ({ isOpen: !state.isOpen })),
       addProduct: (item) =>
         set((state) => {
@@ -69,6 +75,8 @@ export const useCartStore = create<IUseCartStore>()(
             return { cart: updatedCart };
           }
         }),
+      setPaymentIntent: (val) => set((state) => ({ paymentIntent: val })),
+      setCheckout: (val) => set((state) => ({ onCheckout: val })),
     }),
     { name: "cart-store" }
   )

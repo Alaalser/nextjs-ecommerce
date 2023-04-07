@@ -23,10 +23,11 @@ export default function Navbar({ user }: Session) {
           onClick={() => cartStore.toggleCart()}
           className="flex items-center text-3l relative cursor-pointer "
         >
-          <AnimatePresence>
+          <AnimatePresence key={Math.random()}>
             <AiFillShopping size={32} />
             {cartStore.cart.length > 0 ? (
               <motion.span
+                key={Math.random()}
                 animate={{ scale: 1 }}
                 initial={{ scale: 0 }}
                 exit={{ scale: 0 }}

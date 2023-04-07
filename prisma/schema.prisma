@@ -46,6 +46,28 @@ model User {
   accounts         Account[]
   sessions         Session[]
   stripeCustomerId String?
+  Order            Order[]
+}
+
+model Order {
+  id              String    @id @default(cuid())
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId          String
+  amount          Float
+  currency        String
+  createdDate     DateTime  @default(now())
+  paymentIntentId String?   @unique
+  products        Product[]
+}
+
+model Product {
+  id          String  @id @default(cuid())
+  name        String
+  description String?
+  unit_amout  Float
+  image       String
+  quantity    Float   @default(0)
+  Order       Order[]
 }
 
 model VerificationToken {

@@ -20,7 +20,7 @@ const ProductPage = async ({
   console.log(searchParams.id);
 
   return (
-    <div className="flex justify-between gap-24 p-12 text-gray-700">
+    <div className="lg:flex block justify-between gap-24 lg:p-6 text-gray-700 ">
       <Image
         alt="Picture of the product"
         src={searchParams.image}
@@ -29,7 +29,7 @@ const ProductPage = async ({
         className="w-full h-96 object-cover rounded-lg"
       />
       <div className="font-medium text-gray-600">
-        <h1 className="text-2xl py-2">{searchParams.name}</h1>
+        <h1 className="text-2xl py-10 md:py-2">{searchParams.name}</h1>
         <p>{searchParams.description}</p>
         <p className="py-2">{searchParams.features}</p>
         <div className="flex gap-2">
