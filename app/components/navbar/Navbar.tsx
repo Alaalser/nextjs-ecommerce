@@ -17,7 +17,7 @@ export default function Navbar({ user }: Session) {
   return (
     <nav className="flex justify-between items-center py-8">
       <h1 onClick={() => router.push("/")} className=" text-2xl cursor-pointer">
-        Navbar
+        Home
       </h1>
       <ul className="flex items-center gap-12">
         <li
