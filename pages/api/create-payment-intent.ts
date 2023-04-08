@@ -1,12 +1,10 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import Stripe from "stripe";
-import getCurrentUser from "@/app/actions/getCurrentUser";
 import { getServerSession } from "next-auth";
 import { authOptions } from "./auth/[...nextauth]";
 import prisma from "@/app/lib/prismadb";
 
 interface ICartType {
-  reduce(arg0: (acc: number, item: any) => number, arg1: number): unknown;
   name: string;
   image: string;
   id: string;
@@ -19,12 +17,12 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2022-11-15",
 });
 
-const calculateOrderAmount = (items: ICartType) => {
-  const total = items.reduce((acc: number, item: any) => {
+const calculateOrderAmount = (items: ICartType[]) => {
+  const totalPrice = items.reduce((acc, item) => {
     return acc + item.unit_amount! * item.quantity!;
   }, 0);
 
-  return total;
+  return totalPrice;
 };
 export default async function handler(
   req: NextApiRequest,
@@ -48,18 +46,16 @@ export default async function handler(
     amount: calculateOrderAmount(items),
     currency: "usd",
     status: "pending",
-    paymentIntentID: payment_intent_id,
+    paymentIntentId: payment_intent_id,
     products: {
-      connect: items.map((item: ICartType) => {
-        return {
-          name: item.name,
-          image: item.image,
-          id: item.id,
-          quantity: item.quantity,
-          amount: item.unit_amount,
-          description: item.description!.slice(0, 100),
-        };
-      }),
+      create: items.map((item: ICartType) => ({
+        id: item.id,
+        name: item.name,
+        image: item.image,
+        quantity: item.quantity,
+        unit_amout: parseFloat(item.unit_amount as any),
+        description: item.description!,
+      })),
     },
   };
 
@@ -71,7 +67,7 @@ export default async function handler(
       const updated_intent = await stripe.paymentIntents.update(
         payment_intent_id,
         {
-          amount: calculateOrderAmount(items) as number,
+          amount: calculateOrderAmount(items),
         }
       );
       const existing_order = await prisma.order.findFirst({
@@ -87,7 +83,7 @@ export default async function handler(
       const updated_order = await prisma.order.update({
         where: { id: existing_order?.id },
         data: {
-          amount: calculateOrderAmount(items) as number,
+          amount: calculateOrderAmount(items),
           products: {
             deleteMany: {},
             create: items.map((item: ICartType) => {
@@ -96,8 +92,8 @@ export default async function handler(
                 image: item.image,
                 id: item.id,
                 quantity: item.quantity,
-                amount: item.unit_amount,
-                description: item.description!.slice(0, 100),
+                unit_amout: parseFloat(item.unit_amount as any),
+                description: item.description!,
               };
             }),
           },
@@ -107,17 +103,16 @@ export default async function handler(
     }
   } else {
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: calculateOrderAmount(items) as number,
+      amount: calculateOrderAmount(items),
       currency: "usd",
       automatic_payment_methods: {
         enabled: true,
       },
     });
-    orderData.paymentIntentID = paymentIntent.id;
+    orderData.paymentIntentId = paymentIntent.id;
     const newOrder = await prisma.order.create({
       data: orderData as any,
     });
+    res.status(200).json({ paymentIntent });
   }
-  res.status(200).json({ message: "done" });
-  return;
 }

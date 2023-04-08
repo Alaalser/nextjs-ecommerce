@@ -6,7 +6,7 @@ import { useCallback } from "react";
 import { formatPrice } from "../components/product/PriceFormat";
 import { IoAddCircle, IoRemoveCircle } from "react-icons/io5";
 import { AnimatePresence, motion } from "framer-motion";
-import Checkout from "../components/Checkout";
+import Checkout from "../checkout/Checkout";
 
 type CartItem = {
   name: string;
@@ -25,7 +25,7 @@ const CartItem: React.FC<ICart> = ({ cart }) => {
   const cartStore = useCartStore();
 
   const totalPrice = cart.reduce((acc, item) => {
-    return (acc as any) + item.unit_amount! * item.quantity!;
+    return acc + item.unit_amount! * item.quantity!;
   }, 0);
 
   const handleToggle = useCallback(
@@ -51,15 +51,24 @@ const CartItem: React.FC<ICart> = ({ cart }) => {
         onClick={(e: React.MouseEvent<HTMLDivElement>) => e.stopPropagation()}
         className="w-full bg-white  absolute right-0 top-0 h-screen p-12 overflow-y-scroll text-gray-70 md:w-1/4"
       >
-        <button
-          onClick={() => cartStore.toggleCart()}
-          className="text-sm font-bold pb-12"
-        >
-          Back to store
-        </button>
-        <h1 className="text-2xl font-bold">Here is your shopping list</h1>
+        {cartStore.onCheckout === "checkout" ? (
+          <button
+            onClick={() => cartStore.setCheckout("cart")}
+            className="text-sm font-bold pb-12"
+          >
+            Back to cart
+          </button>
+        ) : (
+          <button
+            onClick={() => cartStore.toggleCart()}
+            className="text-sm font-bold pb-12"
+          >
+            Back to store
+          </button>
+        )}
         {cartStore.onCheckout === "cart" && (
           <>
+            <h1 className="text-2xl font-bold">Here is your shopping list</h1>
             {cart.map((item: any) => (
               <motion.div layout key={item.id} className="flex py-4 gap-4">
                 <Image
@@ -109,17 +118,19 @@ const CartItem: React.FC<ICart> = ({ cart }) => {
             ))}
           </>
         )}
-        {cartStore.cart.length > 0 && <p>Total :{formatPrice(totalPrice)}</p>}
-        <motion.div layout>
-          {cartStore.cart.length > 0 && (
-            <button
-              onClick={() => cartStore.setCheckout("checkout")}
-              className="py-2 mt-4 bg-teal-700 w-full text-white rounded-md"
-            >
-              Checkout
-            </button>
-          )}
-        </motion.div>
+        {cartStore.cart.length > 0 && cartStore.onCheckout === "cart" && (
+          <>
+            <p>Total :{formatPrice(totalPrice)}</p>
+            <motion.div layout>
+              <button
+                onClick={() => cartStore.setCheckout("checkout")}
+                className="py-2 mt-4 bg-teal-700 w-full text-white rounded-md"
+              >
+                Checkout
+              </button>
+            </motion.div>
+          </>
+        )}
         {cartStore.onCheckout === "checkout" && <Checkout />}
         <AnimatePresence>
           {!cartStore.cart.length && (

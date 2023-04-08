@@ -50,11 +50,12 @@ model User {
 }
 
 model Order {
-  id              String    @id @default(cuid())
+  id              String    @id @default(cuid()) 
   user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId          String
   amount          Float
   currency        String
+  status          String
   createdDate     DateTime  @default(now())
   paymentIntentId String?   @unique
   products        Product[]

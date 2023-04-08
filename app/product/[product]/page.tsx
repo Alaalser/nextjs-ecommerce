@@ -17,8 +17,6 @@ const ProductPage = async ({
 }: {
   searchParams: ISearchParams;
 }) => {
-  console.log(searchParams.id);
-
   return (
     <div className="lg:flex block justify-between gap-24 lg:p-6 text-gray-700 ">
       <Image
