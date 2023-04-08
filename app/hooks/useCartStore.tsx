@@ -20,6 +20,7 @@ interface IUseCartStore {
   onCheckout: string;
   setPaymentIntent: (val: string) => void;
   setCheckout: (val: string) => void;
+  clearCart: () => void;
 }
 
 export const useCartStore = create<IUseCartStore>()(
@@ -30,6 +31,7 @@ export const useCartStore = create<IUseCartStore>()(
       paymentIntent: "",
       onCheckout: "cart",
       toggleCart: () => set((state) => ({ isOpen: !state.isOpen })),
+      clearCart: () => set((state) => ({ cart: [] })),
       addProduct: (item) =>
         set((state) => {
           const existingItem = state.cart.find(
