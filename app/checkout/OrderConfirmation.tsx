@@ -42,12 +42,12 @@ const OrderConfirmation = () => {
       <div className="flex items-center justify-center gap-12 ">
         <Link href={"/dashboard"}>
           <button
-            onClick={() =>
+            onClick={() => {
               setTimeout(() => {
                 cartStore.setCheckout("cart");
-                cartStore.toggleCart();
-              }, 300)
-            }
+              }, 300);
+              cartStore.toggleCart();
+            }}
             className="py-2 mt-4 w-full bg-teal-700 rounded-md text-white "
           >
             Check your order

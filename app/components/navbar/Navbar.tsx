@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import Cart from "../../cart/Cart";
 import { AiFillShopping } from "react-icons/ai";
 import { AnimatePresence, motion } from "framer-motion";
+import Link from "next/link";
 
 export default function Navbar({ user }: Session) {
   const router = useRouter();
@@ -42,13 +43,33 @@ export default function Navbar({ user }: Session) {
         </li>
         {user ? (
           <li>
-            <Image
-              src={user?.image as string}
-              alt={user?.name as string}
-              width={36}
-              height={36}
-              className="rounded-full"
-            />
+            <div className="dropdown dropdown-end cursor-pointer">
+              <Image
+                src={user?.image as string}
+                alt={user?.name as string}
+                width={36}
+                height={36}
+                className="rounded-full"
+                tabIndex={0}
+              />
+              <ul
+                tabIndex={0}
+                className="dropdown-content menu p-4 shadow bg-base-100 rounded-box w-36 space-y-4 "
+              >
+                <Link
+                  className="hover:bg-base-300 p-4 rounded-md text-center"
+                  href={"/dashboard"}
+                >
+                  Orders
+                </Link>
+                <button
+                  className="hover:bg-base-300 p-4 rounded-md"
+                  onClick={() => signOut()}
+                >
+                  Sign Out
+                </button>
+              </ul>
+            </div>
           </li>
         ) : (
           <li>
