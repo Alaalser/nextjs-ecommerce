@@ -48,7 +48,7 @@ const Dashboard = async () => {
               </span>
             </p>
             <p className="font-medium"> Total: {formatPrice(order.amount)}</p>
-            <div className="lg:flex gap-8 text-sm items-baseline">
+            <div className="lg:flex gap-8 text-sm ">
               {order.products.map((product) => (
                 <div className="py-2" key={product.id}>
                   <h1 className="py-2">{product.name}</h1>
